@@ -1,4 +1,4 @@
-package service;
+package hello.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 
-import beans.Message;
-import dao.DAOMessage;
-import dao.DAOMessageImpl;
+import hello.beans.Message;
+import hello.dao.DAOMessage;
+import hello.dao.DAOMessageImpl;
 
 @Service
-public class ServiceMessageImpl {
+public class ServiceMessageImpl implements ServiceMessage{
 
 	@Autowired
 	private DAOMessageImpl daomessageimpl;
@@ -27,6 +27,14 @@ public class ServiceMessageImpl {
 			throw e;
 		}
 		
+	}
+	
+	public ArrayList<Message> getAllMessages() throws Exception {	
+		try {
+			return daomessageimpl.getAllMessages();	
+		}catch(Exception e){
+			throw e;
+		}
 	}
 		
 }

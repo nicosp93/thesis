@@ -20,8 +20,9 @@ import org.thethingsnetwork.data.common.Connection;
 import org.thethingsnetwork.data.common.events.EventHandler;
 import org.thethingsnetwork.data.mqtt.Client;
 
-import beans.Message;
-import dao.DAOMessageImpl;
+import hello.beans.Message;
+import hello.dao.DAOMessageImpl;
+import hello.service.ServiceMessage;
 
 import org.thethingsnetwork.data.common.messages.DataMessage;
 import org.thethingsnetwork.data.common.messages.DownlinkMessage;
@@ -37,6 +38,10 @@ import java.util.concurrent.atomic.AtomicLong;
 @RestController
 public class GreetingController {
 
+	
+	@Autowired
+	ServiceMessage service;
+	
 	/*private final AtomicLong counter = new AtomicLong();
 	private static String payload="emptyPayload";
 	 
@@ -47,7 +52,18 @@ public class GreetingController {
 	
     
    // private static String template = "Hello, %s!"+ payload;
-    
+	@RequestMapping("/getmessages")
+	public ArrayList<Message> getAllMessages() throws MqttException, Exception {
+		ArrayList<Message> mejs;
+		try {
+
+			mejs = service.getAllMessages();
+		}catch(Exception e){
+			throw e;
+		}
+		return mejs;
+	}
+	
     @RequestMapping("/greeting")
     public Greeting greeting(@RequestParam(value="name", defaultValue="World")  String name) throws MqttException, Exception {
     	

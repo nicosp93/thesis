@@ -31,8 +31,8 @@ import org.thethingsnetwork.data.common.messages.RawMessage;
 import org.thethingsnetwork.data.common.messages.UplinkMessage;
 import org.thethingsnetwork.data.mqtt.Client;
 
-import beans.Message;
-import service.*;
+import hello.beans.Message;
+import hello.service.*;
 
 @SpringBootApplication
 public class Application {

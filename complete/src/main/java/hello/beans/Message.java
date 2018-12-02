@@ -1,4 +1,4 @@
-package beans;
+package hello.beans;
 
 
 import javax.persistence.GeneratedValue;
