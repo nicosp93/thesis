@@ -1,4 +1,4 @@
-package hello.dao;
+package hello.dto;
 
 
 import javax.sql.DataSource;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Component;
-import hello.beans.Message;
+import hello.entity.Message;
 
 @Component
 public class DAOMessageImpl implements DAOMessage{
@@ -24,16 +24,17 @@ public class DAOMessageImpl implements DAOMessage{
 	
 	public void register(Message message) throws Exception{
 			
-		String sql = "INSERT INTO messages(temperature,sensor,time,date) values(?,?,?,?)";
+		String sql = "INSERT INTO messages(name, value ,sensor,time,date) values(?,?,?,?,?)";
 		Connection con=null;
 		try {
 			
 			con = datasource.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setString(1,message.getTemperature());
-			ps.setString(2, message.getSensor());
-			ps.setString(3, message.getTime());
-			ps.setString(4, message.getDate());
+			ps.setString(1,message.getName());
+			ps.setString(2,message.getValue());
+			ps.setString(3,message.getSensorId());
+			ps.setString(4,message.getTime());
+			ps.setString(5,message.getDate());
 			ps.executeUpdate();
 			ps.close();
 		}catch(Exception e){
@@ -46,24 +47,22 @@ public class DAOMessageImpl implements DAOMessage{
 	}
 
 	public ArrayList<Message> getAllMessages() throws Exception {
-		String sql = "SELECT * FROM messages;";
+		String sql = "SELECT * FROM messages";
 		ArrayList<Message> messagesList= new ArrayList<>();
-			
-			
 		Connection con=null;
 		try {
-			
 			con = datasource.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery(sql);
 			while (rs.next()) {
 				String userid = rs.getString("id");
-				String temperature = rs.getString("temperature");
+				String name = rs.getString("name");
+				String value = rs.getString("value");
 				String sensor = rs.getString("sensor");	
 				String time = rs.getString("time");
 				String date = rs.getString("date");
 				
-				messagesList.add(new Message(temperature,sensor,time,date));
+				messagesList.add(new Message(date,sensor,time,value,name));
 			}
 			ps.close();
 		}catch(Exception e){

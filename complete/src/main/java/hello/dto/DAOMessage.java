@@ -1,8 +1,8 @@
-package hello.dao;
+package hello.dto;
 
 
 
-import hello.beans.Message;
+import hello.entity.Message;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

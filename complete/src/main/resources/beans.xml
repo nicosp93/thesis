@@ -5,12 +5,12 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
-	<bean name="DAOMessageImpl" class="hello.dao.DAOMessageImpl"/>
+	<bean name="DAOMessageImpl" class="hello.dto.DAOMessageImpl"/>
    	<bean name="Message" class="hello.beans.Message"/>
    	<bean name="ServiceMessageImpl" class="hello.service.ServiceMessageImpl"/>
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-		<property name="url" value="jdbc:mysql;DATABASE_TO_UPPER=false//localhost:3306/thesisdb"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/thesisdb"/>
 		<property name="username" value="root"/>
 		<property name="password" value=""/>
 	</bean>

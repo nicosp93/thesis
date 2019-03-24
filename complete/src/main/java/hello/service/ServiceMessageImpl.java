@@ -2,33 +2,65 @@ package hello.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.Set;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.StreamingHttpOutputMessage.Body;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.thethingsnetwork.data.common.messages.DataMessage;
+import org.thethingsnetwork.data.common.messages.UplinkMessage;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import hello.beans.Message;
-import hello.dao.DAOMessage;
-import hello.dao.DAOMessageImpl;
+import hello.entity.Message;
+import hello.repository.MessageRepository;
+import hello.dto.DAOMessage;
+import hello.dto.DAOMessageImpl;
 
 @Service
 public class ServiceMessageImpl implements ServiceMessage{
 
 	@Autowired
 	private DAOMessageImpl daomessageimpl;
-    
-	public void register(Message message) throws Exception {	
+	
+	
+	@Override
+	public void register(String devId, DataMessage data) throws Exception {	
 		try {
+			//Extract data from the message
+        	//String payload= byteArrayToString(((UplinkMessage)data).getPayloadRaw());	        	
+        	String date =  ((UplinkMessage)data).getMetadata().getTime().substring(0,10);
+        	String time = ((UplinkMessage)data).getMetadata().getTime().substring(11,19);
+        	
+        	//Parse body from the message
+        	Map<String,Object> body;
+        	String key = "", value = "";
+        	try {
+	    		body=((UplinkMessage)data).getPayloadFields();
+	    		key = body.keySet().stream().findFirst().get();
+	    		value = body.get(key).toString();
+    		}catch(Exception e){
+    			if(key.isEmpty()) {
+    	    		key ="empty_key";
+    	    		value="empty_value";
+            	}
+    		}
+        	Message message = new Message(date,devId, time, value, key);
 			daomessageimpl.register(message);
-			System.out.println("Insert in DB| Sensor :"+ message.getSensor()+" |Temperature: "+message.getTemperature()+" |TIME: "+message.getTime()+" |DATE"+message.getDate());
+			System.out.println("Insert in DB| Sensor :"+ message.getSensorId()+" |Name: "+message.getName()+"|Value: "+message.getValue()+ "|TIME: "+message.getTime()+" |DATE: "+message.getDate());
 		}catch(Exception e){
 			throw e;
 		}
 		
 	}
 	
+	@Override
 	public ArrayList<Message> getAllMessages() throws Exception {	
 		try {
 			return daomessageimpl.getAllMessages();	
@@ -36,5 +68,14 @@ public class ServiceMessageImpl implements ServiceMessage{
 			throw e;
 		}
 	}
+	
+	public static String byteArrayToString(byte[] in) {
+        char out[] = new char[in.length * 2];
+        for (int i = 0; i < in.length; i++) {
+            out[i * 2] = "0123456789ABCDEF".charAt((in[i] >> 4) & 15);
+            out[i * 2 + 1] = "0123456789ABCDEF".charAt(in[i] & 15);
+        }
+        return new String(out);
+    }
 		
 }
