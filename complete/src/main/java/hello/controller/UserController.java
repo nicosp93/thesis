@@ -7,19 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import hello.entity.Message;
+import hello.entity.User;
 import hello.repository.MessageRepository;
 import hello.service.ServiceMessage;
+import hello.service.ServiceUser;
 
 @RestController
-public class MessageController {
+public class UserController {
 
 	@Autowired
-	private ServiceMessage serviceMessage;
+	private ServiceUser serviceUser;
   
-	@GetMapping("/getmessages")
-	public ArrayList<Message> getAllMessages() throws MqttException, Exception {
-		return serviceMessage.getAllMessages();
-
+	@GetMapping("/getusers")
+	public ArrayList<User> getAllUsers() throws MqttException, Exception {
+		return serviceUser.getAllUsers();
 	}
 
    
