@@ -56,17 +56,16 @@ public class DAOMessageImpl implements DAOMessage{
 			ResultSet rs = ps.executeQuery(sql);
 			while (rs.next()) {
 				String userid = rs.getString("id");
-				String name = rs.getString("name");
-				String value = rs.getString("value");
-				String sensor = rs.getString("sensor");	
-				String time = rs.getString("time");
 				String date = rs.getString("date");
-				
+				String name = rs.getString("name");
+				String sensor = rs.getString("sensor");	
+				String value = rs.getString("value");
+				String time = rs.getString("time");
 				messagesList.add(new Message(date,sensor,time,value,name));
 			}
 			ps.close();
 		}catch(Exception e){
-			throw e;
+			System.out.println(e.getStackTrace());
 		}finally {
 			if(con!=null) {
 			con.close();
