@@ -66,7 +66,6 @@ public class DAOUserImpl implements DAOUser{
 	}
 	
 	public User findByUsername(String username){
-		System.out.println(username);
 		String sql = "SELECT * FROM users WHERE username=? ";
 		ArrayList<User> userList= new ArrayList<>();
 		Connection con=null;
@@ -75,7 +74,6 @@ public class DAOUserImpl implements DAOUser{
 			con = datasource.getConnection();
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE username = ?");
 			ps.setString(1, username);
-			System.out.println(ps.toString());
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Boolean admin = rs.getBoolean("admin");

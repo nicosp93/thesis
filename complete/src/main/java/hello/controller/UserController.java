@@ -2,19 +2,13 @@ package hello.controller;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.List;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import hello.Greeting;
-import hello.entity.Message;
 import hello.entity.User;
-import hello.repository.MessageRepository;
-import hello.service.ServiceMessage;
 import hello.service.ServiceUser;
 
 @RestController
@@ -45,6 +39,13 @@ public class UserController {
 			) throws Exception {
 		serviceUser.delete(username);
     }
+	
+	@RequestMapping("/getuser")
+	public User getUserByUsername(
+			@RequestParam(value="username") String username
+			) throws MqttException, Exception {
+		return serviceUser.getUserByUsername(username);
+	}
 
    
 }
