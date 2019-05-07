@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -25,11 +26,9 @@ public class DAOUserImpl implements DAOUser{
 	
 	
 	public void register(User user) throws Exception{
-			
-		String sql = "INSERT INTO users(admin, creation_time , first_name, last_namee, username) values(?,?,?,?,?)";
+		String sql = "INSERT INTO users(admin, creation_time , first_name, last_name, username) values(?,?,?,?,?)";
 		Connection con=null;
 		try {
-			
 			con = datasource.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setBoolean(1,user.getAdmin());
@@ -44,6 +43,61 @@ public class DAOUserImpl implements DAOUser{
 		}finally {
 			if(con!=null) {
 			con.close();
+			}
+		}
+	}
+	
+	public void delete(String username) throws Exception{
+		String sql = "DELETE FROM users WHERE username = ?";
+		Connection con=null;
+		try {
+			con = datasource.getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1,username);
+			ps.executeUpdate();
+			ps.close();
+		}catch(Exception e){
+			throw e;
+		}finally {
+			if(con!=null) {
+			con.close();
+			}
+		}
+	}
+	
+	public User findByUsername(String username){
+		System.out.println(username);
+		String sql = "SELECT * FROM users WHERE username=? ";
+		ArrayList<User> userList= new ArrayList<>();
+		Connection con=null;
+		User userFromDB = null;
+		try {
+			con = datasource.getConnection();
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE username = ?");
+			ps.setString(1, username);
+			System.out.println(ps.toString());
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Boolean admin = rs.getBoolean("admin");
+				Date creationTime = rs.getDate("creation_time");
+				String firstName = rs.getString("first_name");
+				String lastName = rs.getString("last_name");	
+				String userName = rs.getString("username");
+				
+				userFromDB = new User(admin, creationTime, firstName, lastName, username);
+			}
+			ps.close();
+			return userFromDB;
+		}catch(Exception e){
+			return null;
+		}finally {
+			if(con!=null) {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			}
 		}
 	}

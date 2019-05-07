@@ -34,8 +34,40 @@ public class ServiceUserImpl implements ServiceUser{
 	
 	@Override
 	public void register(User user) throws Exception {	
-		
-		
+		try {
+			User userInDB = daousermpl.findByUsername(user.getUsername());
+			if(userInDB == null) {
+				daousermpl.register(user);	
+			}else {
+				throw new Exception("The user with that username already exist");
+			}
+		}catch(Exception e){
+			throw e;
+		}
+	}
+	
+	@Override
+	public void delete(String username) throws Exception{
+			
+		System.out.println(username);
+		User userInDB = daousermpl.findByUsername(username);
+		if(userInDB == null) {
+			throw new Exception("The user that you want to remove does not exist");
+		}
+		if(username.equals(userInDB.getUsername())) {
+			daousermpl.delete(username);		
+		}else {
+			throw new Exception("User fount in DB is not the same one, something wrong happened");
+		}
+	}
+	
+	@Override
+	public User getUserByUsername(String username) throws Exception {
+		try {
+			return daousermpl.findByUsername(username);
+		}catch(Exception e){
+			throw e;
+		}
 	}
 	
 	@Override

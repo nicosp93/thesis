@@ -14,7 +14,12 @@ public interface ServiceUser {
 
 	public void register(User user)  throws Exception;
 	
+	public void delete(String username) throws Exception;
+	
+	public User getUserByUsername(String username) throws Exception;
+	
 	public ArrayList<User> getAllUsers() throws Exception;
+	
 	
 	
 }
