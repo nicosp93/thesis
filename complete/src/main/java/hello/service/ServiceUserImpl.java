@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.entity.Message;
 import hello.entity.User;
 import hello.repository.MessageRepository;
+import hello.service.passwordencode.PasswordEncoder;
 import hello.dto.DAOMessage;
 import hello.dto.DAOMessageImpl;
 import hello.dto.DAOUserImpl;
@@ -37,7 +38,8 @@ public class ServiceUserImpl implements ServiceUser{
 		try {
 			User userInDB = daousermpl.findByUsername(user.getUsername());
 			if(userInDB == null) {
-				daousermpl.register(user);	
+				
+				daousermpl.register(user);
 			}else {
 				throw new Exception("The user with that username already exist");
 			}

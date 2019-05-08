@@ -33,6 +33,18 @@ public class User {
 	@Column(name = "username")
 	private String username;
 
+	@Column(name="password")
+	private String password;
+	
+	public User(Boolean a, Date d, String fn, String ln, String u, String p) {
+		this.admin = a;
+		this.creationTime = d;
+		this.firstName = fn;
+		this.lastName = ln;
+		this.username = u;
+		this.password = p;
+	}
+	
 	public User(Boolean a, Date d, String fn, String ln, String u) {
 		this.admin = a;
 		this.creationTime = d;
@@ -40,6 +52,7 @@ public class User {
 		this.lastName = ln;
 		this.username = u;
 	}
+	
 	public Boolean getAdmin() {
 		return admin;
 	}
@@ -78,6 +91,10 @@ public class User {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	
+	public String getPassword() {
+		return password;
 	}
 	
 }

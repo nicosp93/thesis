@@ -27,9 +27,10 @@ public class UserController {
 			@RequestParam(value="admin") Boolean admin,
 			@RequestParam(value="firstName") String firstName,
 			@RequestParam(value="lastName") String lastName,
-			@RequestParam(value="username") String username
+			@RequestParam(value="username") String username,
+			@RequestParam(value="pasword") String password
 			) throws Exception {
-		User user = new User(admin, new Date(System.currentTimeMillis()) ,firstName, lastName, username);
+		User user = new User(admin, new Date(System.currentTimeMillis()) ,firstName, lastName, username, password);
 		serviceUser.register(user);
     }
 	

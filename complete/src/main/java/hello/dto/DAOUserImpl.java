@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Component;
 import hello.entity.Message;
 import hello.entity.User;
+import hello.service.passwordencode.PasswordEncoder;
 
 @Component
 public class DAOUserImpl implements DAOUser{
@@ -24,9 +25,11 @@ public class DAOUserImpl implements DAOUser{
 	@Autowired //Connect the class DataSource with the DAOMessageeImpl for the Spring automatic stuff 
 	private DataSource datasource;
 	
+	@Autowired
+	private PasswordEncoder passEncoder;
 	
 	public void register(User user) throws Exception{
-		String sql = "INSERT INTO users(admin, creation_time , first_name, last_name, username) values(?,?,?,?,?)";
+		String sql = "INSERT INTO users(admin, creation_time , first_name, last_name, username, password) values(?,?,?,?,?,?)";
 		Connection con=null;
 		try {
 			con = datasource.getConnection();
@@ -36,6 +39,7 @@ public class DAOUserImpl implements DAOUser{
 			ps.setString(3,user.getFirstName());
 			ps.setString(4,user.getLastName());
 			ps.setString(5,user.getUsername());
+			ps.setString(6,passEncoder.encode(user.getPassword()));
 			ps.executeUpdate();
 			ps.close();
 		}catch(Exception e){
@@ -81,8 +85,9 @@ public class DAOUserImpl implements DAOUser{
 				String firstName = rs.getString("first_name");
 				String lastName = rs.getString("last_name");	
 				String userName = rs.getString("username");
+				String password = rs.getString("password");
 				
-				userFromDB = new User(admin, creationTime, firstName, lastName, username);
+				userFromDB = new User(admin, creationTime, firstName, lastName, username, password);
 			}
 			ps.close();
 			return userFromDB;
