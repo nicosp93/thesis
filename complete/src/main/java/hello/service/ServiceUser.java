@@ -20,6 +20,8 @@ public interface ServiceUser {
 	
 	public ArrayList<User> getAllUsers() throws Exception;
 	
+	public Boolean login(String username, String password) throws Exception;
+	
 	
 	
 }

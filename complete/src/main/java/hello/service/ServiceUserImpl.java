@@ -32,6 +32,8 @@ public class ServiceUserImpl implements ServiceUser{
 	@Autowired
 	private DAOUserImpl daousermpl;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Override
 	public void register(User user) throws Exception {	
@@ -76,6 +78,20 @@ public class ServiceUserImpl implements ServiceUser{
 	public ArrayList<User> getAllUsers() throws Exception {	
 		try {
 			return daousermpl.getAllUsers();	
+		}catch(Exception e){
+			throw e;
+		}
+	}
+	
+	@Override
+	public Boolean login(String username, String password) throws Exception {	
+		try {
+			User userInDb = getUserByUsername(username);
+			if(userInDb != null && passwordEncoder.matches(password, userInDb.getPassword())){
+				return true;
+			}else {
+				return false;
+			}
 		}catch(Exception e){
 			throw e;
 		}

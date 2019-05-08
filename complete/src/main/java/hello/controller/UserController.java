@@ -47,6 +47,15 @@ public class UserController {
 			) throws MqttException, Exception {
 		return serviceUser.getUserByUsername(username);
 	}
+	
+	
+	@RequestMapping("/login")
+	public Boolean login(
+			@RequestParam(value="username") String username,
+			@RequestParam(value="password") String password
+			) throws MqttException, Exception {
+		return serviceUser.login(username, password);
+	}
 
    
 }
