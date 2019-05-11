@@ -3,7 +3,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.springframework</groupId>
-    <artifactId>gs-rest-service</artifactId>
+    <artifactId>gs-rest-service-cors</artifactId>
     <version>0.1.0</version>
     <dependencies>  
    	 	<!-- Dozer mapper dependency -->
@@ -132,6 +132,11 @@
         	<groupId>org.sprongframework</groupId>
         	<artifactId>spring-boot-dependencies</artifactId>
         	<version>2.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <scope>test</scope>
         </dependency>
      </dependencies>
 </dependencyManagement>

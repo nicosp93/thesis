@@ -52,8 +52,6 @@ public class ServiceUserImpl implements ServiceUser{
 	
 	@Override
 	public void delete(String username) throws Exception{
-			
-		System.out.println(username);
 		User userInDB = daousermpl.findByUsername(username);
 		if(userInDB == null) {
 			throw new Exception("The user that you want to remove does not exist");
