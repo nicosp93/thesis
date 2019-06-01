@@ -15,5 +15,5 @@ public interface ServiceMessage {
 	
 	public ArrayList<Message> getAllMessages() throws Exception;
 	
-	
+	public ArrayList<Message> getAMessagesPerDev() throws Exception;
 }

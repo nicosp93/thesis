@@ -47,7 +47,7 @@ public class DAOMessageImpl implements DAOMessage{
 	}
 
 	public ArrayList<Message> getAllMessages() throws Exception {
-		String sql = "SELECT * FROM messages";
+		String sql = "SELECT * FROM messages order by id desc";
 		ArrayList<Message> messagesList= new ArrayList<>();
 		Connection con=null;
 		try {
@@ -74,4 +74,31 @@ public class DAOMessageImpl implements DAOMessage{
 		return messagesList;
 	}
 	
+	public ArrayList<Message> getLastMessagePerDevices() throws Exception {
+		String sql = "select * from messages where id in (SELECT MAX(id) FROM messages GROUP BY sensor)";
+		ArrayList<Message> messagesList= new ArrayList<>();
+		Connection con=null;
+		try {
+			con = datasource.getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery(sql);
+			while (rs.next()) {
+				String userid = rs.getString("id");
+				String date = rs.getString("date");
+				String name = rs.getString("name");
+				String sensor = rs.getString("sensor");	
+				String value = rs.getString("value");
+				String time = rs.getString("time");
+				messagesList.add(new Message(date,sensor,time,value,name));
+			}
+			ps.close();
+		}catch(Exception e){
+			System.out.println(e.getStackTrace());
+		}finally {
+			if(con!=null) {
+			con.close();
+			}
+		}
+		return messagesList;
+	}
 }

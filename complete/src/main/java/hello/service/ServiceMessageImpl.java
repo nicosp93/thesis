@@ -69,6 +69,15 @@ public class ServiceMessageImpl implements ServiceMessage{
 		}
 	}
 	
+	@Override
+	public ArrayList<Message> getAMessagesPerDev() throws Exception {	
+		try {
+			return daomessageimpl.getLastMessagePerDevices();	
+		}catch(Exception e){
+			throw e;
+		}
+	}
+	
 	public static String byteArrayToString(byte[] in) {
         char out[] = new char[in.length * 2];
         for (int i = 0; i < in.length; i++) {
