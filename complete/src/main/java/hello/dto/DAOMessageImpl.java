@@ -101,4 +101,31 @@ public class DAOMessageImpl implements DAOMessage{
 		}
 		return messagesList;
 	}
+	public ArrayList<Message> getMessagesLastWeek() throws Exception {
+		String sql = "select * from messages where date between date_sub(now(),INTERVAL 1 WEEK) and now() ORDER BY `messages`.`date` ASC";
+		ArrayList<Message> messagesList= new ArrayList<>();
+		Connection con=null;
+		try {
+			con = datasource.getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery(sql);
+			while (rs.next()) {
+				String userid = rs.getString("id");
+				String date = rs.getString("date");
+				String name = rs.getString("name");
+				String sensor = rs.getString("sensor");	
+				String value = rs.getString("value");
+				String time = rs.getString("time");
+				messagesList.add(new Message(date,sensor,time,value,name));
+			}
+			ps.close();
+		}catch(Exception e){
+			System.out.println(e.getStackTrace());
+		}finally {
+			if(con!=null) {
+			con.close();
+			}
+		}
+		return messagesList;
+	}
 }

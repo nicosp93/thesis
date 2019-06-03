@@ -35,6 +35,11 @@ public class MessageController {
 	public ResponseEntity<ArrayList<Message>> getAllMessagesPerDevice() throws MqttException, Exception {
 		return new ResponseEntity<>(serviceMessage.getAMessagesPerDev() , HttpStatus.OK);
 	}
+	
+	@GetMapping("/getlastweek")
+	public ResponseEntity<ArrayList<Message>> getLastWeek() throws MqttException, Exception {
+		return new ResponseEntity<>(serviceMessage.getMessagesLastWeek() , HttpStatus.OK);
+	}
 
    
 }
