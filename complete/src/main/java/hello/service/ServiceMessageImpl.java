@@ -68,6 +68,14 @@ public class ServiceMessageImpl implements ServiceMessage{
 			throw e;
 		}
 	}
+	@Override
+	public ArrayList<Message> getAllMessages(String typeOfData) throws Exception {	
+		try {
+			return daomessageimpl.getAllMessages(typeOfData);	
+		}catch(Exception e){
+			throw e;
+		}
+	}
 	
 	@Override
 	public ArrayList<Message> getAMessagesPerDev() throws Exception {	
@@ -79,9 +87,18 @@ public class ServiceMessageImpl implements ServiceMessage{
 	}
 	
 	@Override
-	public ArrayList<Message> getMessagesLastWeek() throws Exception {
+	public ArrayList<String> getTypeOfData() throws Exception{
 		try {
-			return daomessageimpl.getMessagesLastWeek();	
+			return daomessageimpl.getTypeOfData();	
+		}catch(Exception e){
+			throw e;
+		}
+	}
+	
+	@Override
+	public ArrayList<Message> getMessagesLastWeek(String typeOfData) throws Exception {
+		try {
+			return daomessageimpl.getMessagesLastWeek(typeOfData);	
 		}catch(Exception e){
 			throw e;
 		}

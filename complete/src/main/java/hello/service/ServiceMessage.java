@@ -17,5 +17,9 @@ public interface ServiceMessage {
 	
 	public ArrayList<Message> getAMessagesPerDev() throws Exception;
 	
-	public ArrayList<Message> getMessagesLastWeek() throws Exception;
+	public ArrayList<Message> getMessagesLastWeek(String typeOfData) throws Exception;
+	
+	public ArrayList<Message> getAllMessages(String typeOfData) throws Exception;
+	
+	public ArrayList<String> getTypeOfData() throws Exception;
 }

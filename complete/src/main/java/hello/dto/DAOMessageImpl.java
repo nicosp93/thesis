@@ -74,6 +74,34 @@ public class DAOMessageImpl implements DAOMessage{
 		return messagesList;
 	}
 	
+	public ArrayList<Message> getAllMessages(String typeOfData) throws Exception {
+		ArrayList<Message> messagesList= new ArrayList<>();
+		Connection con=null;
+		try {
+			con = datasource.getConnection();
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM messages WHERE name = ?");
+			ps.setString(1,typeOfData);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				String userid = rs.getString("id");
+				String date = rs.getString("date");
+				String name = rs.getString("name");
+				String sensor = rs.getString("sensor");	
+				String value = rs.getString("value");
+				String time = rs.getString("time");
+				messagesList.add(new Message(date,sensor,time,value,name));
+			}
+			ps.close();
+		}catch(Exception e){
+			System.out.println(e.getStackTrace());
+		}finally {
+			if(con!=null) {
+			con.close();
+			}
+		}
+		return messagesList;
+	}
+	
 	public ArrayList<Message> getLastMessagePerDevices() throws Exception {
 		String sql = "select * from messages where id in (SELECT MAX(id) FROM messages GROUP BY sensor)";
 		ArrayList<Message> messagesList= new ArrayList<>();
@@ -101,14 +129,15 @@ public class DAOMessageImpl implements DAOMessage{
 		}
 		return messagesList;
 	}
-	public ArrayList<Message> getMessagesLastWeek() throws Exception {
+	public ArrayList<Message> getMessagesLastWeek(String typeOfData) throws Exception {
 		String sql = "select * from messages where date between date_sub(now(),INTERVAL 1 WEEK) and now() ORDER BY `messages`.`date` ASC";
 		ArrayList<Message> messagesList= new ArrayList<>();
 		Connection con=null;
 		try {
 			con = datasource.getConnection();
-			PreparedStatement ps = con.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery(sql);
+			PreparedStatement ps = con.prepareStatement("select * from messages where date between date_sub(now(),INTERVAL 1 WEEK) and now() and name= ? ORDER BY `messages`.`date` ASC");
+			ps.setString(1,typeOfData);
+			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				String userid = rs.getString("id");
 				String date = rs.getString("date");
@@ -117,6 +146,29 @@ public class DAOMessageImpl implements DAOMessage{
 				String value = rs.getString("value");
 				String time = rs.getString("time");
 				messagesList.add(new Message(date,sensor,time,value,name));
+			}
+			ps.close();
+		}catch(Exception e){
+			System.out.println(e.getStackTrace());
+		}finally {
+			if(con!=null) {
+			con.close();
+			}
+		}
+		return messagesList;
+	}
+	
+	public ArrayList<String> getTypeOfData() throws Exception{
+		String sql = "select name from messages group by name";
+		ArrayList<String> messagesList= new ArrayList<>();
+		Connection con=null;
+		try {
+			con = datasource.getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery(sql);
+			while (rs.next()) {
+				String name = rs.getString("name");
+				messagesList.add(name);
 			}
 			ps.close();
 		}catch(Exception e){

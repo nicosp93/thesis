@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import hello.entity.Message;
 import hello.repository.MessageRepository;
@@ -37,8 +38,21 @@ public class MessageController {
 	}
 	
 	@GetMapping("/getlastweek")
-	public ResponseEntity<ArrayList<Message>> getLastWeek() throws MqttException, Exception {
-		return new ResponseEntity<>(serviceMessage.getMessagesLastWeek() , HttpStatus.OK);
+	public ResponseEntity<ArrayList<Message>> getLastWeek(
+			@RequestParam(value="name") String typeOfData
+			) throws MqttException, Exception {
+		return new ResponseEntity<>(serviceMessage.getMessagesLastWeek(typeOfData) , HttpStatus.OK);
+	}
+	@GetMapping("/getmsj")
+	public ResponseEntity<ArrayList<Message>> getAllMessages(
+			@RequestParam(value="name") String typeOfData
+			) throws MqttException, Exception {
+		return new ResponseEntity<>(serviceMessage.getAllMessages(typeOfData) , HttpStatus.OK);
+	}
+	
+	@GetMapping("/gettypeofdata")
+	public ResponseEntity<ArrayList<String>> getTypeOfData() throws MqttException, Exception {
+		return new ResponseEntity<>(serviceMessage.getTypeOfData() , HttpStatus.OK);
 	}
 
    
