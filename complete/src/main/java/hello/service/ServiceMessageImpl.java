@@ -3,6 +3,7 @@ package hello.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -40,20 +41,19 @@ public class ServiceMessageImpl implements ServiceMessage{
         	
         	//Parse body from the message
         	Map<String,Object> body;
-        	String key = "", value = "";
-        	try {
-	    		body=((UplinkMessage)data).getPayloadFields();
-	    		key = body.keySet().stream().findFirst().get();
-	    		value = body.get(key).toString();
-    		}catch(Exception e){
-    			if(key.isEmpty()) {
-    	    		key ="empty_key";
-    	    		value="empty_value";
-            	}
-    		}
-        	Message message = new Message(date,devId, time, value, key);
-			daomessageimpl.register(message);
-			System.out.println("Insert in DB| Sensor :"+ message.getSensorId()+" |Name: "+message.getName()+"|Value: "+message.getValue()+ "|TIME: "+message.getTime()+" |DATE: "+message.getDate());
+
+    		body=((UplinkMessage)data).getPayloadFields();
+    		System.out.println(body.toString());
+    		//Iterator it = body.keySet().stream().iterator();
+    		for(Iterator it = body.keySet().stream().iterator(); it.hasNext();) {
+    			String i_key =(String) it.next();
+    			System.out.println("it1:"+i_key);
+    			String i_value = body.get(i_key).toString();
+    			System.out.println(i_value);
+    			Message message = new Message(date,devId, time, i_value, i_key);
+    			System.out.println("Insert in DB| Sensor :"+ message.getSensorId()+" |Name: "+message.getName()+"|Value: "+message.getValue()+ "|TIME: "+message.getTime()+" |DATE: "+message.getDate());
+    			daomessageimpl.register(message);
+    		}		
 		}catch(Exception e){
 			throw e;
 		}
