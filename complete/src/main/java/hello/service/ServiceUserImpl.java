@@ -36,12 +36,12 @@ public class ServiceUserImpl implements ServiceUser{
 	private PasswordEncoder passwordEncoder;
 	
 	@Override
-	public void register(User user) throws Exception {	
+	public boolean register(User user) throws Exception {	
 		try {
 			User userInDB = daousermpl.findByUsername(user.getUsername());
 			if(userInDB == null) {
-				
 				daousermpl.register(user);
+				return true;
 			}else {
 				throw new Exception("The user with that username already exist");
 			}
@@ -89,6 +89,16 @@ public class ServiceUserImpl implements ServiceUser{
 				return true;
 			}else {
 				return false;
+			}
+		}catch(Exception e){
+			throw e;
+		}
+	}
+	@Override
+	public void setRelation(String username, String[] devices) throws Exception{
+		try {
+			for(int i =0; devices.length > i ; i++) {
+				 daousermpl.setRelation(username , devices[i]);	
 			}
 		}catch(Exception e){
 			throw e;

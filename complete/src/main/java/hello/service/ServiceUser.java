@@ -12,7 +12,7 @@ import hello.entity.User;
 
 public interface ServiceUser {
 
-	public void register(User user)  throws Exception;
+	public boolean register(User user)  throws Exception;
 	
 	public void delete(String username) throws Exception;
 	
@@ -22,6 +22,7 @@ public interface ServiceUser {
 	
 	public Boolean login(String username, String password) throws Exception;
 	
+	public void setRelation(String username, String[] devices) throws Exception;
 	
 	
 }

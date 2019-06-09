@@ -50,6 +50,24 @@ public class DAOUserImpl implements DAOUser{
 			}
 		}
 	}
+	public void setRelation(String username ,String device) throws Exception {
+		String sql = "INSERT INTO relations(username, device) values(?,?)";
+		Connection con=null;
+		try {
+			con = datasource.getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1,username);
+			ps.setString(2,device);
+			ps.executeUpdate();
+			ps.close();
+		}catch(Exception e){
+			throw e;
+		}finally {
+			if(con!=null) {
+			con.close();
+			}
+		}
+	}
 	
 	public void delete(String username) throws Exception{
 		String sql = "DELETE FROM users WHERE username = ?";

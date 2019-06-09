@@ -23,7 +23,7 @@ public class UserController {
 	}
 	
 	@RequestMapping("/register")
-	public void register(
+	public boolean register(
 			@RequestParam(value="admin") Boolean admin,
 			@RequestParam(value="firstName") String firstName,
 			@RequestParam(value="lastName") String lastName,
@@ -31,7 +31,7 @@ public class UserController {
 			@RequestParam(value="pasword") String password
 			) throws Exception {
 		User user = new User(admin, new Date(System.currentTimeMillis()) ,firstName, lastName, username, password);
-		serviceUser.register(user);
+		return serviceUser.register(user);
     }
 	
 	@RequestMapping("/delete")
@@ -55,6 +55,13 @@ public class UserController {
 			@RequestParam(value="password") String password
 			) throws MqttException, Exception {
 		return serviceUser.login(username, password);
+	}
+	@RequestMapping("/setrelation")
+	public void setRelation(
+			@RequestParam(value="username") String username,
+			@RequestParam(value="devices") String[] devices
+			) throws MqttException, Exception {
+		 serviceUser.setRelation(username, devices);
 	}
 
    

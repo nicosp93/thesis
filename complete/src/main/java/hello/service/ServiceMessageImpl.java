@@ -71,12 +71,19 @@ public class ServiceMessageImpl implements ServiceMessage{
 	@Override
 	public ArrayList<Message> getAllMessages(String typeOfData) throws Exception {	
 		try {
-			return daomessageimpl.getAllMessages(typeOfData);	
+			return daomessageimpl.getAllMessages(typeOfData);
 		}catch(Exception e){
 			throw e;
 		}
 	}
-	
+	@Override
+	public ArrayList<Message> getLast24hours(String typeOfData) throws Exception {	
+		try {
+			return daomessageimpl.getLast24hours(typeOfData);
+		}catch(Exception e){
+			throw e;
+		}
+	}
 	@Override
 	public ArrayList<Message> getAMessagesPerDev() throws Exception {	
 		try {

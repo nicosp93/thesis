@@ -49,6 +49,12 @@ public class MessageController {
 			) throws MqttException, Exception {
 		return new ResponseEntity<>(serviceMessage.getAllMessages(typeOfData) , HttpStatus.OK);
 	}
+	@GetMapping("/getlast24hours")
+	public ResponseEntity<ArrayList<Message>> getLast24hours(
+			@RequestParam(value="name") String typeOfData
+			) throws MqttException, Exception {
+		return new ResponseEntity<>(serviceMessage.getLast24hours(typeOfData) , HttpStatus.OK);
+	}
 	
 	@GetMapping("/gettypeofdata")
 	public ResponseEntity<ArrayList<String>> getTypeOfData() throws MqttException, Exception {
