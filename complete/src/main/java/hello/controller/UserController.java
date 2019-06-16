@@ -63,6 +63,12 @@ public class UserController {
 			) throws MqttException, Exception {
 		 serviceUser.setRelation(username, devices);
 	}
+	@RequestMapping("/getrelation")
+	public ArrayList<String> setRelation(
+			@RequestParam(value="username") String username
+			) throws MqttException, Exception {
+		 return serviceUser.getRelation(username);
+	}
 
    
 }

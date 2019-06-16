@@ -39,9 +39,10 @@ public class MessageController {
 	
 	@GetMapping("/getlastweek")
 	public ResponseEntity<ArrayList<Message>> getLastWeek(
-			@RequestParam(value="name") String typeOfData
+			@RequestParam(value="name") String typeOfData,
+			@RequestParam(value="username") String username
 			) throws MqttException, Exception {
-		return new ResponseEntity<>(serviceMessage.getMessagesLastWeek(typeOfData) , HttpStatus.OK);
+		return new ResponseEntity<>(serviceMessage.getMessagesLastWeek(typeOfData, username) , HttpStatus.OK);
 	}
 	@GetMapping("/getmsj")
 	public ResponseEntity<ArrayList<Message>> getAllMessages(
