@@ -61,6 +61,11 @@ public class MessageController {
 	public ResponseEntity<ArrayList<String>> getTypeOfData() throws MqttException, Exception {
 		return new ResponseEntity<>(serviceMessage.getTypeOfData() , HttpStatus.OK);
 	}
-
+	@GetMapping("/getrelation")
+	public ResponseEntity<ArrayList<String>> getRelation(
+			@RequestParam(value="username") String username
+			) throws MqttException, Exception {
+		return new ResponseEntity<>(serviceMessage.getRelation(username) , HttpStatus.OK);
+	}
    
 }

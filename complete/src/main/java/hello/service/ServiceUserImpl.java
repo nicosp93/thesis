@@ -103,7 +103,5 @@ public class ServiceUserImpl implements ServiceUser{
 		}catch(Exception e){
 			throw e;
 		}
-	}
-	
-		
+	}	
 }

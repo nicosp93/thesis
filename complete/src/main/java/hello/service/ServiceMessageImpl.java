@@ -20,16 +20,17 @@ import org.thethingsnetwork.data.common.messages.UplinkMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hello.entity.Message;
+import hello.entity.User;
 import hello.repository.MessageRepository;
 import hello.dto.DAOMessage;
 import hello.dto.DAOMessageImpl;
+import hello.dto.DAOUserImpl;
 
 @Service
 public class ServiceMessageImpl implements ServiceMessage{
 
 	@Autowired
 	private DAOMessageImpl daomessageimpl;
-	
 	
 	@Override
 	public void register(String devId, DataMessage data) throws Exception {	
@@ -103,14 +104,47 @@ public class ServiceMessageImpl implements ServiceMessage{
 	}
 	
 	@Override
-	public ArrayList<Message> getMessagesLastWeek(String typeOfData) throws Exception {
+	public ArrayList<Message> getMessagesLastWeek(String typeOfData, String username) throws Exception {
 		try {
-			return daomessageimpl.getMessagesLastWeek(typeOfData);	
+			
+			if (isAdmin(username)) {
+				return daomessageimpl.getMessagesLastWeek(typeOfData);	
+			}else {
+				ArrayList<String> devices = daomessageimpl.getRelation(username);
+				System.out.println("devices"+ devices.toString());
+				return daomessageimpl.getMessagesLastWeek(typeOfData, devices);	
+			}
+			
 		}catch(Exception e){
 			throw e;
 		}
 	}
+	public boolean isAdmin(String username){
+		try {
+			User user = getUserByUsername(username);
+			return user.getAdmin();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		
+	}	
 	
+	public User getUserByUsername(String username) throws Exception{
+		try {
+			return daomessageimpl.findByUsername(username);
+		}catch(Exception e){
+			throw e;
+		}
+	}
+	public ArrayList<String> getRelation(String username) throws Exception{
+		try {
+			return daomessageimpl.getRelation(username);
+		}catch(Exception e){
+			throw e;
+		}
+	}
 	public static String byteArrayToString(byte[] in) {
         char out[] = new char[in.length * 2];
         for (int i = 0; i < in.length; i++) {

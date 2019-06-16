@@ -3,8 +3,10 @@ package hello.dto;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Component;
 import hello.entity.Message;
+import hello.entity.User;
 
 @Component
 public class DAOMessageImpl implements DAOMessage{
@@ -188,6 +191,46 @@ public class DAOMessageImpl implements DAOMessage{
 		}
 		return messagesList;
 	}
+public ArrayList<Message> getMessagesLastWeek(String typeOfData, ArrayList<String> devices) throws Exception {
+		
+		
+		ArrayList<Message> messagesList= new ArrayList<>();
+		StringBuilder builder = new StringBuilder();
+
+		for( int i = 0 ; i < devices.size(); i++ ) {
+		    builder.append("?,");
+		}
+		Connection con=null;
+		try {
+			con = datasource.getConnection();
+			PreparedStatement ps = con.prepareStatement("select * from messages where date between date_sub(now(),INTERVAL 1 WEEK) and now() and name= ? and sensor in("
+				 + builder.deleteCharAt( builder.length() -1 ).toString() + ") ORDER BY `messages`.`date` ASC");
+			ps.setString(1,typeOfData);
+			int index = 2;
+			for( String o : devices ) {
+			   ps.setString(  index++, o );
+			}
+			System.out.println(ps);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				String userid = rs.getString("id");
+				String date = rs.getString("date");
+				String name = rs.getString("name");
+				String sensor = rs.getString("sensor");	
+				String value = rs.getString("value");
+				String time = rs.getString("time");
+				messagesList.add(new Message(date,sensor,time,value,name));
+			}
+			ps.close();
+		}catch(Exception e){
+			System.out.println(e.getStackTrace());
+		}finally {
+			if(con!=null) {
+			con.close();
+			}
+		}
+		return messagesList;
+	}
 	
 	public ArrayList<String> getTypeOfData() throws Exception{
 		String sql = "select name from messages group by name";
@@ -210,5 +253,73 @@ public class DAOMessageImpl implements DAOMessage{
 			}
 		}
 		return messagesList;
+	}
+	
+	
+	
+	
+	
+	public ArrayList<String> getRelation(String username){
+		ArrayList<String> relationList= new ArrayList<>();
+		Connection con=null;
+		User userFromDB = null;
+		try {
+			con = datasource.getConnection();
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM relations WHERE username = ?");
+			ps.setString(1, username);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				String relation = rs.getString("device");
+				relationList.add(relation);
+			}
+			ps.close();
+			return relationList;
+		}catch(Exception e){
+			return null;
+		}finally {
+			if(con!=null) {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			}
+		}
+	}
+	public User findByUsername(String username){
+		String sql = "SELECT * FROM users WHERE username=? ";
+		ArrayList<User> userList= new ArrayList<>();
+		Connection con=null;
+		User userFromDB = null;
+		try {
+			con = datasource.getConnection();
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE username = ?");
+			ps.setString(1, username);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Boolean admin = rs.getBoolean("admin");
+				Date creationTime = rs.getDate("creation_time");
+				String firstName = rs.getString("first_name");
+				String lastName = rs.getString("last_name");	
+				String userName = rs.getString("username");
+				String password = rs.getString("password");
+				
+				userFromDB = new User(admin, creationTime, firstName, lastName, username, password);
+			}
+			ps.close();
+			return userFromDB;
+		}catch(Exception e){
+			return null;
+		}finally {
+			if(con!=null) {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			}
+		}
 	}
 }

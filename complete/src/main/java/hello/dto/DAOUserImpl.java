@@ -69,6 +69,7 @@ public class DAOUserImpl implements DAOUser{
 		}
 	}
 	
+	
 	public void delete(String username) throws Exception{
 		String sql = "DELETE FROM users WHERE username = ?";
 		Connection con=null;
@@ -149,6 +150,34 @@ public class DAOUserImpl implements DAOUser{
 			}
 		}
 		return userList;
+	}
+	public ArrayList<String> getRelation(String username){
+		ArrayList<String> relationList= new ArrayList<>();
+		Connection con=null;
+		User userFromDB = null;
+		try {
+			con = datasource.getConnection();
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM relations WHERE username = ?");
+			ps.setString(1, username);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				String relation = rs.getString("device");
+				relationList.add(relation);
+			}
+			ps.close();
+			return relationList;
+		}catch(Exception e){
+			return null;
+		}finally {
+			if(con!=null) {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			}
+		}
 	}
 	
 }

@@ -19,5 +19,6 @@ public interface DAOMessage  {
 	public ArrayList<Message> getLastMessagePerDevices() throws Exception;
 	
 	public ArrayList<Message> getMessagesLastWeek(String typeOfData) throws Exception;
+
 	
 }
