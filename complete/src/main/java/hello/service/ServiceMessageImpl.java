@@ -48,9 +48,7 @@ public class ServiceMessageImpl implements ServiceMessage{
     		//Iterator it = body.keySet().stream().iterator();
     		for(Iterator it = body.keySet().stream().iterator(); it.hasNext();) {
     			String i_key =(String) it.next();
-    			System.out.println("it1:"+i_key);
     			String i_value = body.get(i_key).toString();
-    			System.out.println(i_value);
     			Message message = new Message(date,devId, time, i_value, i_key);
     			System.out.println("Insert in DB| Sensor :"+ message.getSensorId()+" |Name: "+message.getName()+"|Value: "+message.getValue()+ "|TIME: "+message.getTime()+" |DATE: "+message.getDate());
     			daomessageimpl.register(message);
@@ -78,9 +76,15 @@ public class ServiceMessageImpl implements ServiceMessage{
 		}
 	}
 	@Override
-	public ArrayList<Message> getLast24hours(String typeOfData) throws Exception {	
+	public ArrayList<Message> getLast24hours(String typeOfData, String username) throws Exception {	
 		try {
-			return daomessageimpl.getLast24hours(typeOfData);
+			if (isAdmin(username)) {
+				return daomessageimpl.getLast24hours(typeOfData);
+			}else {
+				ArrayList<String> devices = daomessageimpl.getRelation(username);
+				return daomessageimpl.getLast24hours(typeOfData, devices);
+			}
+			
 		}catch(Exception e){
 			throw e;
 		}
@@ -111,7 +115,6 @@ public class ServiceMessageImpl implements ServiceMessage{
 				return daomessageimpl.getMessagesLastWeek(typeOfData);	
 			}else {
 				ArrayList<String> devices = daomessageimpl.getRelation(username);
-				System.out.println("devices"+ devices.toString());
 				return daomessageimpl.getMessagesLastWeek(typeOfData, devices);	
 			}
 			

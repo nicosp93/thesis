@@ -134,6 +134,43 @@ public class DAOMessageImpl implements DAOMessage{
 		}
 		return messagesList;
 	}
+	public ArrayList<Message> getLast24hours(String typeOfData, ArrayList<String> devices) throws Exception {
+		ArrayList<Message> messagesList= new ArrayList<>();
+		StringBuilder builder = new StringBuilder();
+
+		for( int i = 0 ; i < devices.size(); i++ ) {
+		    builder.append("?,");
+		}
+		Connection con=null;
+		try {
+			con = datasource.getConnection();
+			PreparedStatement ps = con.prepareStatement("select * FROM messages WHERE time < DATE_SUB(NOW(), INTERVAL 1 HOUR) AND name = ? and date = CURRENT_DATE() and sensor in("  
+									 + builder.deleteCharAt( builder.length() -1 ).toString() +  ")order by time desc");
+			ps.setString(1,typeOfData);
+			int index = 2;
+			for( String o : devices ) {
+			   ps.setString(  index++, o );
+			}
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				String userid = rs.getString("id");
+				String date = rs.getString("date");
+				String name = rs.getString("name");
+				String sensor = rs.getString("sensor");	
+				String value = rs.getString("value");
+				String time = rs.getString("time");
+				messagesList.add(new Message(date,sensor,time,value,name));
+			}
+			ps.close();
+		}catch(Exception e){
+			System.out.println(e.getStackTrace());
+		}finally {
+			if(con!=null) {
+			con.close();
+			}
+		}
+		return messagesList;
+	}
 	
 	public ArrayList<Message> getLastMessagePerDevices() throws Exception {
 		String sql = "select * from messages where id in (SELECT MAX(id) FROM messages GROUP BY sensor)";
@@ -191,9 +228,7 @@ public class DAOMessageImpl implements DAOMessage{
 		}
 		return messagesList;
 	}
-public ArrayList<Message> getMessagesLastWeek(String typeOfData, ArrayList<String> devices) throws Exception {
-		
-		
+public ArrayList<Message> getMessagesLastWeek(String typeOfData, ArrayList<String> devices) throws Exception {	
 		ArrayList<Message> messagesList= new ArrayList<>();
 		StringBuilder builder = new StringBuilder();
 
@@ -210,7 +245,6 @@ public ArrayList<Message> getMessagesLastWeek(String typeOfData, ArrayList<Strin
 			for( String o : devices ) {
 			   ps.setString(  index++, o );
 			}
-			System.out.println(ps);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				String userid = rs.getString("id");

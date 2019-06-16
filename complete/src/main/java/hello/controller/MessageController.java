@@ -52,9 +52,10 @@ public class MessageController {
 	}
 	@GetMapping("/getlast24hours")
 	public ResponseEntity<ArrayList<Message>> getLast24hours(
-			@RequestParam(value="name") String typeOfData
+			@RequestParam(value="name") String typeOfData,
+			@RequestParam(value="username") String username
 			) throws MqttException, Exception {
-		return new ResponseEntity<>(serviceMessage.getLast24hours(typeOfData) , HttpStatus.OK);
+		return new ResponseEntity<>(serviceMessage.getLast24hours(typeOfData, username) , HttpStatus.OK);
 	}
 	
 	@GetMapping("/gettypeofdata")

@@ -24,7 +24,7 @@ public interface ServiceMessage {
 	
 	public ArrayList<String> getTypeOfData() throws Exception;
 	
-	public ArrayList<Message> getLast24hours(String typeOfData) throws Exception;
+	public ArrayList<Message> getLast24hours(String typeOfData, String username) throws Exception;
 	
 	public User getUserByUsername(String username) throws Exception;
 	
