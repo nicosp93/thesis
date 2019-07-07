@@ -148,6 +148,22 @@ public class ServiceMessageImpl implements ServiceMessage{
 			throw e;
 		}
 	}
+	
+	public ArrayList<Message> getMessagesLastYear(String typeOfData, String username) throws Exception{
+		try {
+			
+			if (isAdmin(username)) {
+				return daomessageimpl.getMessagesLastYear(typeOfData);	
+			}else {
+				ArrayList<String> devices = daomessageimpl.getRelation(username);
+				return daomessageimpl.getMessagesLastYear(typeOfData, devices);	
+			}
+			
+		}catch(Exception e){
+			throw e;
+		}
+	}
+	
 	public static String byteArrayToString(byte[] in) {
         char out[] = new char[in.length * 2];
         for (int i = 0; i < in.length; i++) {

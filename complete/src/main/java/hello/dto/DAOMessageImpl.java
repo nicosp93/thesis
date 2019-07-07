@@ -267,7 +267,7 @@ public ArrayList<Message> getMessagesLastWeek(String typeOfData, ArrayList<Strin
 	}
 	
 	public ArrayList<String> getTypeOfData() throws Exception{
-		String sql = "select name from messages group by name";
+		String sql = "select name from messages where name in ('temperature_1','temperature_2','luminosity_1','luminosity_2','relative_humidity_1','barometric_presure_1') group by name";
 		ArrayList<String> messagesList= new ArrayList<>();
 		Connection con=null;
 		try {
@@ -356,4 +356,69 @@ public ArrayList<Message> getMessagesLastWeek(String typeOfData, ArrayList<Strin
 			}
 		}
 	}
+	public ArrayList<Message> getMessagesLastYear(String typeOfData) throws Exception {
+			
+			ArrayList<Message> messagesList= new ArrayList<>();
+			Connection con=null;
+			try {
+				con = datasource.getConnection();
+				PreparedStatement ps = con.prepareStatement("select * from messages where date between date_sub(now(),INTERVAL 1 YEAR) and now() and name= ? ORDER BY `messages`.`date` ASC");
+				ps.setString(1,typeOfData);
+				ResultSet rs = ps.executeQuery();
+				while (rs.next()) {
+					String userid = rs.getString("id");
+					String date = rs.getString("date");
+					String name = rs.getString("name");
+					String sensor = rs.getString("sensor");	
+					String value = rs.getString("value");
+					String time = rs.getString("time");
+					messagesList.add(new Message(date,sensor,time,value,name));
+				}
+				ps.close();
+			}catch(Exception e){
+				System.out.println(e.getStackTrace());
+			}finally {
+				if(con!=null) {
+				con.close();
+				}
+			}
+			return messagesList;
+		}
+	public ArrayList<Message> getMessagesLastYear(String typeOfData, ArrayList<String> devices) throws Exception {	
+			ArrayList<Message> messagesList= new ArrayList<>();
+			StringBuilder builder = new StringBuilder();
+	
+			for( int i = 0 ; i < devices.size(); i++ ) {
+			    builder.append("?,");
+			}
+			Connection con=null;
+			try {
+				con = datasource.getConnection();
+				PreparedStatement ps = con.prepareStatement("select * from messages where date between date_sub(now(),INTERVAL 1 YEAR) and now() and name= ? and sensor in("
+					 + builder.deleteCharAt( builder.length() -1 ).toString() + ") ORDER BY `messages`.`date` ASC");
+				ps.setString(1,typeOfData);
+				int index = 2;
+				for( String o : devices ) {
+				   ps.setString(  index++, o );
+				}
+				ResultSet rs = ps.executeQuery();
+				while (rs.next()) {
+					String userid = rs.getString("id");
+					String date = rs.getString("date");
+					String name = rs.getString("name");
+					String sensor = rs.getString("sensor");
+					String value = rs.getString("value");
+					String time = rs.getString("time");
+					messagesList.add(new Message(date,sensor,time,value,name));
+				}
+				ps.close();
+			}catch(Exception e){
+				System.out.println(e.getStackTrace());
+			}finally {
+				if(con!=null) {
+				con.close();
+				}
+			}
+			return messagesList;
+		}
 }

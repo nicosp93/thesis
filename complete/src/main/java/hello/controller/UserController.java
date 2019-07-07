@@ -18,11 +18,13 @@ public class UserController {
 	private ServiceUser serviceUser;
   
 	@GetMapping("/getusers")
+	// Returns all users from the users table
 	public ArrayList<User> getAllUsers() throws MqttException, Exception {
 		return serviceUser.getAllUsers();
 	}
 	
 	@RequestMapping("/register")
+	//Register a new user with the data provided
 	public boolean register(
 			@RequestParam(value="admin") Boolean admin,
 			@RequestParam(value="firstName") String firstName,
@@ -35,6 +37,7 @@ public class UserController {
     }
 	
 	@RequestMapping("/delete")
+	// Delete a user given a username
 	public void delete(
 			@RequestParam(value="username") String username
 			) throws Exception {
@@ -42,6 +45,8 @@ public class UserController {
     }
 	
 	@RequestMapping("/getuser")
+	//Returns all the information from a user
+	//providing his/her username
 	public User getUserByUsername(
 			@RequestParam(value="username") String username
 			) throws MqttException, Exception {
@@ -50,6 +55,8 @@ public class UserController {
 	
 	
 	@RequestMapping("/login")
+	// Validates if the password matches the
+	// whith the user associated
 	public Boolean login(
 			@RequestParam(value="username") String username,
 			@RequestParam(value="password") String password
@@ -57,6 +64,8 @@ public class UserController {
 		return serviceUser.login(username, password);
 	}
 	@RequestMapping("/setrelation")
+	// Save in the relations table
+	//all of the sensors that this user owns
 	public void setRelation(
 			@RequestParam(value="username") String username,
 			@RequestParam(value="devices") String[] devices

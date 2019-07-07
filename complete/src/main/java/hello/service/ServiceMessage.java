@@ -29,4 +29,7 @@ public interface ServiceMessage {
 	public User getUserByUsername(String username) throws Exception;
 	
 	public ArrayList<String> getRelation(String username) throws Exception;
+	
+	public ArrayList<Message> getMessagesLastYear(String typeOfData, String username) throws Exception;
+	
 }
