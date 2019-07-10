@@ -38,6 +38,7 @@ public class DAOMessageImpl implements DAOMessage{
 			ps.setString(3,message.getSensorId());
 			ps.setString(4,message.getTime());
 			ps.setString(5,message.getDate());
+			System.out.println(ps.toString());
 			ps.executeUpdate();
 			ps.close();
 			return true;
@@ -267,7 +268,7 @@ public ArrayList<Message> getMessagesLastWeek(String typeOfData, ArrayList<Strin
 	}
 	
 	public ArrayList<String> getTypeOfData() throws Exception{
-		String sql = "select name from messages where name in ('temperature_1','temperature_2','luminosity_1','luminosity_2','relative_humidity_1','barometric_presure_1') group by name";
+		String sql = "select name from messages where name in ('temperature_1','temperature_2','luminosity_1','luminosity_2','relative_humidity_1','barometric_pressure_1') group by name";
 		ArrayList<String> messagesList= new ArrayList<>();
 		Connection con=null;
 		try {
